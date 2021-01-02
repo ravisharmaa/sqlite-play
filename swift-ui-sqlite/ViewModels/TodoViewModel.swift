@@ -32,8 +32,8 @@ class TodoViewModel: BaseViewModel {
         let todoTable = Migration.getTableObject(name: "todos")
         
         let count = try! DatabaseManager.shared.connection!.scalar(todoTable.count)
-        
-        if Reachability.isConnectedToNetwork() && (count < 0) {
+    
+        if Reachability.isConnectedToNetwork() && count < 0   {
             var innerUrl = urlComponents
             innerUrl.path = "/todos"
             
@@ -54,11 +54,12 @@ class TodoViewModel: BaseViewModel {
             
             do {
                 self.todos = try DatabaseManager.shared.connection!.prepare(todoTable).map { row in
-                    return try row.decode()
+                    let decoder = row.decoder(userInfo: [.sqliteOrigin: true])
+                    return try Todo(from: decoder)
                 }
                 
             } catch let error {
-                print(error, "here")
+                print(error)
             }
         }
     }
@@ -69,7 +70,7 @@ class TodoViewModel: BaseViewModel {
         let connection = DatabaseManager.shared.connection
         do {
             for todo in response {
-                try connection?.run("INSERT INTO todos (userId,title,completed) VALUES (?,?,?)", [todo.userId, todo.title, todo.completed])
+                try connection?.run("INSERT INTO todos (user_id,title,completed) VALUES (?,?,?)", [todo.userId, todo.title, todo.completed])
             }
             print("insertion completed")
             
@@ -88,11 +89,39 @@ extension TodoViewModel {
         let title: String
         let completed: Bool
         
-//        enum CodingKeys: String, CodingKey {
-//            case userId = "userId"
-//            case id
-//            case title
-//            case completed
-//        }
+        enum OfflineDecodingKeys: String, CodingKey {
+            case userId = "user_id"
+            case id
+            case title
+            case completed
+        }
+        
+        enum OnlineDecodingKeys: String, CodingKey {
+            case userId
+            case id
+            case title
+            case completed
+        }
+        
+        init(from decoder: Decoder) throws {
+            if let origin = decoder.userInfo[.sqliteOrigin] as? Bool, origin == true {
+                let container = try decoder.container(keyedBy: OfflineDecodingKeys.self)
+                id = try container.decode(Int.self, forKey: .id)
+                title = try container.decode(String.self, forKey: .title)
+                userId = try container.decode(Int.self, forKey: .userId)
+                completed = try container.decode(Bool.self, forKey: .completed)
+            } else {
+                let container = try decoder.container(keyedBy: OnlineDecodingKeys.self)
+                id = try container.decode(Int.self, forKey: .id)
+                title = try container.decode(String.self, forKey: .title)
+                userId = try container.decode(Int.self, forKey: .userId)
+                completed = try container.decode(Bool.self, forKey: .completed)
+            }
+        }
     }
+}
+
+extension CodingUserInfoKey {
+    static let sqliteOrigin = CodingUserInfoKey(rawValue: "sqliteOrigin")!
+    static let jsonOrigin = CodingUserInfoKey(rawValue: "jsonOrigin")!
 }

@@ -16,18 +16,16 @@ final class Migration {
         self.connection = connection
     }
     
-
     func run() {
         createTodosTable()
     }
 
-    
     private func createTodosTable() {
         
         let table = Migration.getTableObject(name: "todos")
         
         let id = Expression<Int64>("id")
-        let userId = Expression<Int>("userId")
+        let userId = Expression<Int>("user_id")
         let title = Expression<String>("title")
         let completed = Expression<Bool>("completed")
         
@@ -74,8 +72,6 @@ final class Migration {
     
     
     class func getTableObject(name: String) -> Table {
-        let table = Table(name)
-        
-        return table
+        return Table(name)
     }
 }
