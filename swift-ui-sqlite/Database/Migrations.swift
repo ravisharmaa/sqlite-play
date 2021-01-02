@@ -27,9 +27,9 @@ final class Migration {
         let table = Migration.getTableObject(name: "todos")
         
         let id = Expression<Int64>("id")
-        let userId = Expression<String?>("user_id")
+        let userId = Expression<Int>("userId")
         let title = Expression<String>("title")
-        let completed = Expression<Bool?>("completed")
+        let completed = Expression<Bool>("completed")
         
         do {
             

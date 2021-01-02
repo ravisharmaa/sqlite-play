@@ -8,7 +8,6 @@
 import Foundation
 import SystemConfiguration
 
-
 open class Reachability {
     
     class func isConnectedToNetwork() -> Bool {
@@ -25,6 +24,7 @@ open class Reachability {
         }
         
         var flags: SCNetworkReachabilityFlags = []
+        
         if !SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags) {
             return false
         }
@@ -37,5 +37,4 @@ open class Reachability {
         
         return (isReachable && !needsConnection)
     }
-    
 }

@@ -7,8 +7,7 @@
 
 import Foundation
 import SQLite
-
-
+// swiftlint: disable
 class DatabaseManager {
     
     static let shared = DatabaseManager()
@@ -23,7 +22,6 @@ class DatabaseManager {
         
         return nil
     }
-    
     private init () {}
     
     func prepareConnection() -> Connection? {
@@ -67,7 +65,6 @@ class DatabaseManager {
     }
     
     fileprivate func createFile() -> String? {
-        
         do {
             let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
             let fileURL = documentDirectory.appendingPathComponent("database").appendingPathExtension("sqlite3")

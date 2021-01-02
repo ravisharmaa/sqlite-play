@@ -12,16 +12,17 @@ class ViewController: UIViewController {
     
     let todoViewModel: TodoViewModel = TodoViewModel()
     
-    var subscription: Set<AnyCancellable> = []
-
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         
         view.backgroundColor = .red
         
         todoViewModel.fetch()
-        
-        print("showing in ui")
+
+        todoViewModel.$todos.sink { (toDo) in
+            print(toDo)
+        }.store(in: &todoViewModel.subscription)
     }
 
 }
