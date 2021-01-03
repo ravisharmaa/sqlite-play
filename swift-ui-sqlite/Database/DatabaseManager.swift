@@ -7,8 +7,9 @@
 
 import Foundation
 import SQLite
+
 // swiftlint: disable
-class DatabaseManager {
+final class DatabaseManager {
     
     static let shared = DatabaseManager()
     

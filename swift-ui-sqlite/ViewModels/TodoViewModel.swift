@@ -31,9 +31,7 @@ class TodoViewModel: BaseViewModel {
         
         let todoTable = Migration.getTableObject(name: "todos")
         
-        let count = try! DatabaseManager.shared.connection!.scalar(todoTable.count)
-    
-        if Reachability.isConnectedToNetwork() && count < 0   {
+        if Reachability.isConnectedToNetwork() {
             var innerUrl = urlComponents
             innerUrl.path = "/todos"
             
@@ -44,7 +42,7 @@ class TodoViewModel: BaseViewModel {
                 } receiveValue: { (response) in
                     
                     QueueService.backgroundQueue.async { [weak self] in
-                        self?.saveToDatabase(response: response)
+                        self?.insertTo(todoTable, response: response)
                     }
                     
                     self.todos = response
@@ -64,14 +62,19 @@ class TodoViewModel: BaseViewModel {
         }
     }
     
-    private func saveToDatabase(response: [Todo]) {
+    private func insertTo(_ table: Table, response: [Todo]) {
         
         print("inserting to db")
         let connection = DatabaseManager.shared.connection
+    
         do {
-            for todo in response {
+            // refresh the db before inserting
+            try connection?.run(table.delete())
+            
+            try response.forEach { (todo) in
                 try connection?.run("INSERT INTO todos (user_id,title,completed) VALUES (?,?,?)", [todo.userId, todo.title, todo.completed])
             }
+            
             print("insertion completed")
             
         } catch let error {

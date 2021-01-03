@@ -12,17 +12,21 @@ class ViewController: UIViewController {
     
     let todoViewModel: TodoViewModel = TodoViewModel()
     
+    let newsViewModel: NewsViewModel = NewsViewModel()
+    
+    fileprivate var subscription: Set<AnyCancellable> = []
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
         
         view.backgroundColor = .red
         
-        todoViewModel.fetch()
-
-        todoViewModel.$todos.sink { (toDo) in
-            print(toDo)
-        }.store(in: &todoViewModel.subscription)
+        newsViewModel.fetch()
+        
+        newsViewModel.$articles.sink { (articles) in
+            print(articles)
+        }.store(in: &subscription)
     }
 
 }

@@ -8,7 +8,7 @@
 import Foundation
 import SystemConfiguration
 
-open class Reachability {
+final class Reachability {
     
     class func isConnectedToNetwork() -> Bool {
         var zeroAddress = sockaddr_in()

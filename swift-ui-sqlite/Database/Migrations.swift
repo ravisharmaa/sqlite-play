@@ -18,8 +18,9 @@ final class Migration {
     
     func run() {
         createTodosTable()
+        createArticlesTable()
     }
-
+    
     private func createTodosTable() {
         
         let table = Migration.getTableObject(name: "todos")
@@ -45,7 +46,34 @@ final class Migration {
         
     }
     
-
+    private func createArticlesTable() {
+        let table = Migration.getTableObject(name: "articles")
+        
+        let id = Expression<Int64>("id")
+        let uuid = Expression<String>("uuid")
+        let name = Expression<Int>("name")
+        let title = Expression<String?>("title")
+        let description = Expression<String?>("description")
+        let content = Expression<String?>("content")
+        
+        do {
+            
+            try self.connection.run(table.create(ifNotExists: true, block: { (builder) in
+                builder.column(id, primaryKey: .autoincrement)
+                builder.column(uuid, unique: true)
+                builder.column(name)
+                builder.column(title)
+                builder.column(description)
+                builder.column(content)
+            }))
+            
+            
+        } catch let error {
+            print(error.localizedDescription)
+        }
+    }
+    
+    
     private func createCompaniesTable() {
         
         let table = Migration.getTableObject(name: "companies")
