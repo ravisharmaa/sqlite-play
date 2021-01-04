@@ -21,16 +21,14 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .red
-        todoViewModel.fetch()
+        newsViewModel.fetch(status: Reachability.isConnectedToNetwork())
         
         print("showing in ui")
         
-        todoViewModel.$todos.receive(on: RunLoop.main).sink { (todos) in
-            print(todos)
+        newsViewModel.$articles.receive(on: RunLoop.main).sink { (articles) in
+            print(articles)
             print("showed")
         }.store(in: &subscription)
-        
-        
     }
 
 }

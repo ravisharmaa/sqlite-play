@@ -48,9 +48,6 @@ class TodoViewModel: BaseViewModel {
                             print(error)
                         }
                     }
-                    
-                    
-                    
                 }.store(in: &subscription)
         } else {
             
@@ -73,7 +70,6 @@ class TodoViewModel: BaseViewModel {
     private func insertTo(response: [Todo]) throws  {
         
         print("inserting to db")
-        
         let _ = try DatabaseManager.shared.connection?.write { (db) in
            
             try db.execute(sql: "DELETE from todos")
@@ -84,8 +80,6 @@ class TodoViewModel: BaseViewModel {
             
             print("insertion completed")
         }
-        
-       
     }
 }
 
@@ -133,11 +127,4 @@ extension TodoViewModel {
             }
         }
     }
-}
-
-
-
-extension CodingUserInfoKey {
-    static let sqliteOrigin = CodingUserInfoKey(rawValue: "sqliteOrigin")!
-    static let jsonOrigin = CodingUserInfoKey(rawValue: "jsonOrigin")!
 }

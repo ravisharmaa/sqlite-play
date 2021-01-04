@@ -10,6 +10,7 @@
 		292CB5B325A0D6B0007E75DC /* QueueService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 292CB5B225A0D6B0007E75DC /* QueueService.swift */; };
 		293A022625A1650600BB6841 /* NewsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293A022525A1650600BB6841 /* NewsViewModel.swift */; };
 		295050A825A20E11002BE5C7 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 295050A725A20E11002BE5C7 /* GRDB */; };
+		2968535125A2C028007CD231 /* CodingUserInfoKey+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2968535025A2C028007CD231 /* CodingUserInfoKey+Ext.swift */; };
 		2975B392259F94600075FF15 /* Migrations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2975B391259F94600075FF15 /* Migrations.swift */; };
 		29A05294259DE76600ED7B8A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A05293259DE76600ED7B8A /* AppDelegate.swift */; };
 		29A05296259DE76600ED7B8A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A05295259DE76600ED7B8A /* SceneDelegate.swift */; };
@@ -26,6 +27,7 @@
 /* Begin PBXFileReference section */
 		292CB5B225A0D6B0007E75DC /* QueueService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueService.swift; sourceTree = "<group>"; };
 		293A022525A1650600BB6841 /* NewsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewModel.swift; sourceTree = "<group>"; };
+		2968535025A2C028007CD231 /* CodingUserInfoKey+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CodingUserInfoKey+Ext.swift"; sourceTree = "<group>"; };
 		2975B391259F94600075FF15 /* Migrations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Migrations.swift; sourceTree = "<group>"; };
 		29A05290259DE76600ED7B8A /* swift-ui-sqlite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "swift-ui-sqlite.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		29A05293259DE76600ED7B8A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -53,6 +55,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2968534F25A2C015007CD231 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				2968535025A2C028007CD231 /* CodingUserInfoKey+Ext.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		29A05287259DE76600ED7B8A = {
 			isa = PBXGroup;
 			children = (
@@ -73,6 +83,7 @@
 		29A05292259DE76600ED7B8A /* swift-ui-sqlite */ = {
 			isa = PBXGroup;
 			children = (
+				2968534F25A2C015007CD231 /* Extensions */,
 				29BB9C5925A0644300D8CF6F /* ViewModels */,
 				29BB9C5625A05AFC00D8CF6F /* Models */,
 				29BB9C4E25A05A2900D8CF6F /* Service */,
@@ -230,6 +241,7 @@
 				29A052E4259DFFF600ED7B8A /* Reachibility.swift in Sources */,
 				29A05296259DE76600ED7B8A /* SceneDelegate.swift in Sources */,
 				293A022625A1650600BB6841 /* NewsViewModel.swift in Sources */,
+				2968535125A2C028007CD231 /* CodingUserInfoKey+Ext.swift in Sources */,
 				29BB9C5825A05B2800D8CF6F /* NetworkService.swift in Sources */,
 				292CB5B325A0D6B0007E75DC /* QueueService.swift in Sources */,
 			);

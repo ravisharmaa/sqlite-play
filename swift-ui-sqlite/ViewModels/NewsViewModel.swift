@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import GRDB
 
 final class NewsViewModel: BaseViewModel {
     
@@ -19,17 +20,10 @@ final class NewsViewModel: BaseViewModel {
     
     @Published private (set) var articles: [NewsResponse.Article] = []
     
-    //let articlesTable = Migration.getTableObject(name: "articles")
-    
     let connection = DatabaseManager.shared.connection
     
-    func fetch() {
-       // fromDatabase()
-//        if Reachability.isConnectedToNetwork() {
-//            fromNetwork()
-//        } else {
-//            fromDatabase()
-//        }
+    func fetch(status: Bool) {
+        status ? fromNetwork() : fromDatabase()
     }
     
     fileprivate func fromNetwork() {
@@ -58,8 +52,12 @@ final class NewsViewModel: BaseViewModel {
                 //
             } receiveValue: { [self] (newsResponse) in
                 
-                QueueService.backgroundQueue.async { 
-                    //self?.save(newsResponse.articles)
+                QueueService.backgroundQueue.async { [self] in
+                    do {
+                        try save(newsResponse.articles)
+                    } catch let error {
+                        print(error)
+                    }
                 }
                 
                 articles = newsResponse.articles
@@ -67,66 +65,50 @@ final class NewsViewModel: BaseViewModel {
             }.store(in: &subscription)
     }
     
-    /*
-    func save(_ articles: [NewsResponse.Article]) {
+    
+    func save(_ articles: [NewsResponse.Article]) throws {
         
         print("inserting to db")
         
-        do {
-            try connection?.run(articlesTable.delete())
+        let _ = try DatabaseManager.shared.connection?.write { (db) in
+            
+            try db.execute(sql: "DELETE from articles")
             
             try articles.forEach({ (article) in
-                try connection?.run("INSERT INTO articles (uuid, name, title, description, content) VALUES(?,?,?,?,?)", [
-                    article.uuid.uuidString, article.name, article.title, article.description, article.content
-                ])
+                try db.execute(sql: "INSERT INTO articles (name,title,description, content) VALUES(?,?,?,?)", arguments: [article.name, article.title, article.description, article.content])
             })
             
             print("insertion completed")
-            
-        } catch let error {
-            print(error)
         }
-        
-        
     }
     
     fileprivate func fromDatabase() {
-        
-       var articles: [NewsResponse.Article] = []
         do {
-            let statement = try connection!.prepare("SELECT name, title, description, content  FROM articles")
-            for result in statement {
-                let article: NewsResponse.Article = .init(id: nil,
-                                                          name: result[1] as! String,
-                                                          title: result[2] as! String,
-                                                          description: result[3] as? String,
-                                                          url: nil,
-                                                          urlToImage: nil,
-                                                          publishedAt: nil,
-                                                          content: result[4] as? String)
-                articles.append(article)
+            let todos = try DatabaseManager.shared.connection?.read{ (db)  in
+                try NewsResponse.Article.fetchAll(db)
             }
             
-            self.articles = articles
+            if let todos = todos {
+                print(todos)
+            }
             
         } catch let error {
             print(error)
         }
     }
-    */
     
 }
 
 extension NewsViewModel {
     
-    struct NewsResponse: Decodable, Hashable {
+    struct NewsResponse: Codable, Hashable {
         
         let status: String
         let totalResults: Int
         
         let articles: [Article]
         
-        struct Article:  Hashable {
+        struct Article: Hashable {
             let id: String?
             let name: String
             let title: String
@@ -137,6 +119,12 @@ extension NewsViewModel {
             let content: String?
             let uuid: UUID = UUID()
             
+            static let databaseDecodingUserInfo: [CodingUserInfoKey: Any] = [.sqliteOrigin: true]
+           
+            enum AricleOfflineCodingKeys: CodingKey {
+                case name, title, description, content, id
+            }
+            
             enum ArticleCodingKeys: CodingKey {
                 case title, description, url, urlToImage, publishedAt, content, source
             }
@@ -144,22 +132,39 @@ extension NewsViewModel {
     }
 }
 
-extension NewsViewModel.NewsResponse.Article: Decodable {
+extension NewsViewModel.NewsResponse.Article: Codable, FetchableRecord, PersistableRecord {
     
     enum NestedSourceKeys: CodingKey {
         case id, name
     }
     
+    static var databaseTableName: String {
+        return "articles"
+    }
+    
     init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: ArticleCodingKeys.self)
-        self.title = try container.decode(String.self, forKey: .title)
-        self.description = try container.decodeIfPresent(String.self, forKey: .description)
-        self.url = try container.decodeIfPresent(String.self, forKey: .url)
-        self.urlToImage = try container.decodeIfPresent(String.self, forKey: .urlToImage)
-        self.publishedAt = try container.decodeIfPresent(String.self, forKey: .publishedAt)
-        self.content = try container.decodeIfPresent(String.self, forKey: .content)
-        let nestedContainer = try container.nestedContainer(keyedBy: NestedSourceKeys.self, forKey: .source)
-        self.id = try nestedContainer.decodeIfPresent(String.self, forKey: .id)
-        self.name = try nestedContainer.decode(String.self, forKey: .name)
+        
+        if let origin = decoder.userInfo[.sqliteOrigin] as? Bool, origin == true {
+            let container = try decoder.container(keyedBy: AricleOfflineCodingKeys.self)
+            name = try container.decodeIfPresent(String.self, forKey: .name) ?? ""
+            description = try container.decodeIfPresent(String.self, forKey: .description) ?? ""
+            content = try container.decodeIfPresent(String.self, forKey: .content) ?? ""
+            title = try container.decodeIfPresent(String.self, forKey: .title) ?? ""
+            self.id = try container.decodeIfPresent(String.self, forKey: .id)
+            self.publishedAt = "some date"
+            self.url = ""
+            self.urlToImage = ""
+        } else {
+            let container = try decoder.container(keyedBy: ArticleCodingKeys.self)
+            self.title = try container.decode(String.self, forKey: .title)
+            self.description = try container.decodeIfPresent(String.self, forKey: .description)
+            self.url = try container.decodeIfPresent(String.self, forKey: .url)
+            self.urlToImage = try container.decodeIfPresent(String.self, forKey: .urlToImage)
+            self.publishedAt = try container.decodeIfPresent(String.self, forKey: .publishedAt)
+            self.content = try container.decodeIfPresent(String.self, forKey: .content)
+            let nestedContainer = try container.nestedContainer(keyedBy: NestedSourceKeys.self, forKey: .source)
+            self.id = try nestedContainer.decodeIfPresent(String.self, forKey: .id)
+            self.name = try nestedContainer.decode(String.self, forKey: .name)
+        }
     }
 }
