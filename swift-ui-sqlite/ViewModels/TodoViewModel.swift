@@ -27,51 +27,52 @@ class TodoViewModel: BaseViewModel {
     
     //MARK:- Fetch from database or from connection
     
-    func fetch()  {
-        
-        if Reachability.isConnectedToNetwork() {
-            var innerUrl = urlComponents
-            innerUrl.path = "/todos"
-            
-            NetworkService.shared.run(URLRequest(url: innerUrl.url!), model: [TodoViewModel.Todo].self)
-                .receive(on: RunLoop.main)
-                .sink { (_) in
-                    //
-                } receiveValue: { (response) in
-                    
-                    self.todos = response
-                    
-                    QueueService.backgroundQueue.async { [weak self] in
-                        do {
-                            try self?.insertTo(response: response)
-                        } catch let error {
-                            print(error)
-                        }
-                    }
-                }.store(in: &subscription)
-        } else {
-            
-            do {
-                let todos = try DatabaseManager.shared.connection?.read{ (db)  in
-                    try TodoViewModel.Todo.fetchAll(db)
-                }
-                
-                if let todos = todos {
-                    self.todos = todos
-                }
-                
-            } catch let error {
-                print(error)
+    func fetch(status: Bool)  {
+        status ? fromNetwork() : fromDatabase()
+    }
+    
+    fileprivate func fromDatabase() {
+        do {
+            let todos = try DatabaseManager.shared.connection?.read{ (db)  in
+                try TodoViewModel.Todo.fetchAll(db)
             }
+            
+            if let todos = todos {
+                self.todos = todos
+            }
+            
+        } catch let error {
+            print(error)
         }
     }
     
+    fileprivate func fromNetwork() {
+        var innerUrl = urlComponents
+        innerUrl.path = "/todos"
+        
+        NetworkService.shared.run(URLRequest(url: innerUrl.url!), model: [TodoViewModel.Todo].self)
+            .receive(on: RunLoop.main)
+            .sink { (_) in
+                //
+            } receiveValue: { (response) in
+                
+                self.todos = response
+                
+                QueueService.backgroundQueue.async { [weak self] in
+                    do {
+                        try self?.insertTo(response: response)
+                    } catch let error {
+                        print(error)
+                    }
+                }
+            }.store(in: &subscription)
+    }
     
     private func insertTo(response: [Todo]) throws  {
         
         print("inserting to db")
         let _ = try DatabaseManager.shared.connection?.write { (db) in
-           
+            
             try db.execute(sql: "DELETE from todos")
             
             try response.forEach({ (todo) in
@@ -91,9 +92,9 @@ extension TodoViewModel {
         let title: String
         let completed: Bool
         
-        static var databaseTableName: String {
-            return "todos"
-        }
+//        static var databaseTableName: String {
+//            return "todos"
+//        }
         
         enum OfflineDecodingKeys: String, CodingKey {
             case userId = "user_id"
@@ -109,22 +110,22 @@ extension TodoViewModel {
             case completed
         }
         
-        static let databaseDecodingUserInfo: [CodingUserInfoKey: Any] = [.sqliteOrigin: true]
+        //static let databaseDecodingUserInfo: [CodingUserInfoKey: Any] = [.sqliteOrigin: true]
         
         init(from decoder: Decoder) throws {
-            if let origin = decoder.userInfo[.sqliteOrigin] as? Bool, origin == true {
-                let container = try decoder.container(keyedBy: OfflineDecodingKeys.self)
-                id = try container.decode(Int.self, forKey: .id)
-                title = try container.decode(String.self, forKey: .title)
-                userId = try container.decode(Int.self, forKey: .userId)
-                completed = try container.decode(Bool.self, forKey: .completed)
-            } else {
-                let container = try decoder.container(keyedBy: OnlineDecodingKeys.self)
-                id = try container.decode(Int.self, forKey: .id)
-                title = try container.decode(String.self, forKey: .title)
-                userId = try container.decode(Int.self, forKey: .userId)
-                completed = try container.decode(Bool.self, forKey: .completed)
-            }
+            //            if let origin = decoder.userInfo[.sqliteOrigin] as? Bool, origin == true {
+            //                let container = try decoder.container(keyedBy: OfflineDecodingKeys.self)
+            //                id = try container.decode(Int.self, forKey: .id)
+            //                title = try container.decode(String.self, forKey: .title)
+            //                userId = try container.decode(Int.self, forKey: .userId)
+            //                completed = try container.decode(Bool.self, forKey: .completed)
+            //            } else {
+            let container = try decoder.container(keyedBy: OnlineDecodingKeys.self)
+            id = try container.decode(Int.self, forKey: .id)
+            title = try container.decode(String.self, forKey: .title)
+            userId = try container.decode(Int.self, forKey: .userId)
+            completed = try container.decode(Bool.self, forKey: .completed)
+            // }
         }
     }
 }

@@ -20,6 +20,7 @@ final class Migration {
         do {
             try createTodosTable()
             try createArticlesTable()
+            try createNewsTable()
         } catch let error {
             print(error, "while creating table")
         }
@@ -27,9 +28,9 @@ final class Migration {
     
     private func createTodosTable() throws {
         try connection.write { database in
-            try database.create(table: "todos", ifNotExists: true) { (definition) in
+            try database.create(table: "todo", ifNotExists: true) { (definition) in
                 definition.autoIncrementedPrimaryKey("id")
-                definition.column("user_id", .integer)
+                definition.column("userId", .integer)
                 definition.column("title", .text)
                 definition.column("completed", .boolean)
             }
@@ -40,7 +41,7 @@ final class Migration {
     private func createArticlesTable() throws {
         
         try connection.write { database in
-            try database.create(table: "articles", ifNotExists: true) { (definition) in
+            try database.create(table: "article", ifNotExists: true) { (definition) in
                 definition.autoIncrementedPrimaryKey("id")
                 definition.column("name", .text)
                 definition.column("title", .text)
@@ -50,5 +51,15 @@ final class Migration {
         }
     }
     
-    
+    private func createNewsTable() throws {
+        
+        try connection.write { database in
+            try database.create(table: "news", ifNotExists: true) { (definition) in
+                definition.autoIncrementedPrimaryKey("id")
+                definition.column("status", .text)
+                definition.column("totalResults", .integer)
+                definition.column("articles", .text)
+            }
+        }
+    }
 }

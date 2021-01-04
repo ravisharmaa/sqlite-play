@@ -21,14 +21,8 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .red
+        
         newsViewModel.fetch(status: Reachability.isConnectedToNetwork())
-        
-        print("showing in ui")
-        
-        newsViewModel.$articles.receive(on: RunLoop.main).sink { (articles) in
-            print(articles)
-            print("showed")
-        }.store(in: &subscription)
     }
-
+    
 }
