@@ -21,12 +21,16 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .red
+        todoViewModel.fetch()
         
-        newsViewModel.fetch()
+        print("showing in ui")
         
-        newsViewModel.$articles.sink { (articles) in
-            print(articles)
+        todoViewModel.$todos.receive(on: RunLoop.main).sink { (todos) in
+            print(todos)
+            print("showed")
         }.store(in: &subscription)
+        
+        
     }
 
 }

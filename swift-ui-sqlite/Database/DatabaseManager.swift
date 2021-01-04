@@ -6,16 +6,16 @@
 //
 
 import Foundation
-import SQLite
+import GRDB
 
 // swiftlint: disable
 final class DatabaseManager {
     
     static let shared = DatabaseManager()
     
-    var connection: Connection? {
+    var connection: DatabasePool? {
         do {
-            let connection = try Connection(prepareFilePath())
+            let connection = try DatabasePool(path: prepareFilePath())
             return connection
         } catch  _ {
             print("error in connection")
@@ -23,21 +23,22 @@ final class DatabaseManager {
         
         return nil
     }
+   
     private init () {}
     
-    func prepareConnection() -> Connection? {
+    func prepareConnection() -> DatabasePool? {
         
         let path = prepareFilePath()
         
         do {
             if fileExists(at: path) {
                 print(path)
-                return try Connection(path)
+                return try DatabasePool(path: path)
                 
             } else {
                 guard let createdPath = createFile() else { fatalError() }
                 print(path)
-                return try Connection(createdPath)
+                return try DatabasePool(path: createdPath)
                 
             }
         } catch let error {
@@ -55,7 +56,7 @@ final class DatabaseManager {
         
         let url = NSURL(fileURLWithPath: path)
         
-        guard let filePath = url.appendingPathComponent("database")?.appendingPathExtension("sqlite3").path else { fatalError()}
+        guard let filePath = url.appendingPathComponent("database")?.appendingPathExtension("sqlite").path else { fatalError()}
         
         return filePath
         
@@ -68,7 +69,7 @@ final class DatabaseManager {
     fileprivate func createFile() -> String? {
         do {
             let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            let fileURL = documentDirectory.appendingPathComponent("database").appendingPathExtension("sqlite3")
+            let fileURL = documentDirectory.appendingPathComponent("database").appendingPathExtension("sqlite")
             
             return fileURL.path
             

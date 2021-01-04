@@ -3,12 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		292CB5B325A0D6B0007E75DC /* QueueService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 292CB5B225A0D6B0007E75DC /* QueueService.swift */; };
 		293A022625A1650600BB6841 /* NewsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293A022525A1650600BB6841 /* NewsViewModel.swift */; };
+		295050A825A20E11002BE5C7 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 295050A725A20E11002BE5C7 /* GRDB */; };
 		2975B392259F94600075FF15 /* Migrations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2975B391259F94600075FF15 /* Migrations.swift */; };
 		29A05294259DE76600ED7B8A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A05293259DE76600ED7B8A /* AppDelegate.swift */; };
 		29A05296259DE76600ED7B8A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A05295259DE76600ED7B8A /* SceneDelegate.swift */; };
@@ -45,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				295050A825A20E11002BE5C7 /* GRDB in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,6 +162,9 @@
 			dependencies = (
 			);
 			name = "swift-ui-sqlite";
+			packageProductDependencies = (
+				295050A725A20E11002BE5C7 /* GRDB */,
+			);
 			productName = "swift-ui-sqlite";
 			productReference = 29A05290259DE76600ED7B8A /* swift-ui-sqlite.app */;
 			productType = "com.apple.product-type.application";
@@ -187,6 +192,9 @@
 				Base,
 			);
 			mainGroup = 29A05287259DE76600ED7B8A;
+			packageReferences = (
+				295050A625A20E11002BE5C7 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
+			);
 			productRefGroup = 29A05291259DE76600ED7B8A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -425,6 +433,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		295050A625A20E11002BE5C7 /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/GRDB.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		295050A725A20E11002BE5C7 /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 295050A625A20E11002BE5C7 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
+			productName = GRDB;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 29A05288259DE76600ED7B8A /* Project object */;
 }

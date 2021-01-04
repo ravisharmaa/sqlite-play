@@ -7,7 +7,7 @@
 
 import Foundation
 import Combine
-import SQLite
+import GRDB
 
 class BaseViewModel {
     
@@ -27,9 +27,7 @@ class TodoViewModel: BaseViewModel {
     
     //MARK:- Fetch from database or from connection
     
-    func fetch() {
-        
-        let todoTable = Migration.getTableObject(name: "todos")
+    func fetch()  {
         
         if Reachability.isConnectedToNetwork() {
             var innerUrl = urlComponents
@@ -41,19 +39,28 @@ class TodoViewModel: BaseViewModel {
                     //
                 } receiveValue: { (response) in
                     
+                    self.todos = response
+                    
                     QueueService.backgroundQueue.async { [weak self] in
-                        self?.insertTo(todoTable, response: response)
+                        do {
+                            try self?.insertTo(response: response)
+                        } catch let error {
+                            print(error)
+                        }
                     }
                     
-                    self.todos = response
+                    
                     
                 }.store(in: &subscription)
         } else {
             
             do {
-                self.todos = try DatabaseManager.shared.connection!.prepare(todoTable).map { row in
-                    let decoder = row.decoder(userInfo: [.sqliteOrigin: true])
-                    return try Todo(from: decoder)
+                let todos = try DatabaseManager.shared.connection?.read{ (db)  in
+                    try TodoViewModel.Todo.fetchAll(db)
+                }
+                
+                if let todos = todos {
+                    self.todos = todos
                 }
                 
             } catch let error {
@@ -62,35 +69,37 @@ class TodoViewModel: BaseViewModel {
         }
     }
     
-    private func insertTo(_ table: Table, response: [Todo]) {
+    
+    private func insertTo(response: [Todo]) throws  {
         
         print("inserting to db")
-        let connection = DatabaseManager.shared.connection
-    
-        do {
-            // refresh the db before inserting
-            try connection?.run(table.delete())
+        
+        let _ = try DatabaseManager.shared.connection?.write { (db) in
+           
+            try db.execute(sql: "DELETE from todos")
             
-            try response.forEach { (todo) in
-                try connection?.run("INSERT INTO todos (user_id,title,completed) VALUES (?,?,?)", [todo.userId, todo.title, todo.completed])
-            }
+            try response.forEach({ (todo) in
+                try db.execute(sql: "INSERT INTO todos (user_id,title,completed) VALUES(?,?,?)", arguments: [todo.userId, todo.title, todo.completed])
+            })
             
             print("insertion completed")
-            
-        } catch let error {
-            print(error)
         }
         
+       
     }
 }
 
 extension TodoViewModel {
     
-    struct Todo: Codable, Hashable {
+    struct Todo: Codable, Hashable, FetchableRecord, PersistableRecord {
         let userId: Int
         let id: Int
         let title: String
         let completed: Bool
+        
+        static var databaseTableName: String {
+            return "todos"
+        }
         
         enum OfflineDecodingKeys: String, CodingKey {
             case userId = "user_id"
@@ -105,6 +114,8 @@ extension TodoViewModel {
             case title
             case completed
         }
+        
+        static let databaseDecodingUserInfo: [CodingUserInfoKey: Any] = [.sqliteOrigin: true]
         
         init(from decoder: Decoder) throws {
             if let origin = decoder.userInfo[.sqliteOrigin] as? Bool, origin == true {
@@ -123,6 +134,8 @@ extension TodoViewModel {
         }
     }
 }
+
+
 
 extension CodingUserInfoKey {
     static let sqliteOrigin = CodingUserInfoKey(rawValue: "sqliteOrigin")!

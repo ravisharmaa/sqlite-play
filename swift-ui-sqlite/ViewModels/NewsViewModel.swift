@@ -19,12 +19,12 @@ final class NewsViewModel: BaseViewModel {
     
     @Published private (set) var articles: [NewsResponse.Article] = []
     
-    let articlesTable = Migration.getTableObject(name: "articles")
+    //let articlesTable = Migration.getTableObject(name: "articles")
     
     let connection = DatabaseManager.shared.connection
     
     func fetch() {
-        fromDatabase()
+       // fromDatabase()
 //        if Reachability.isConnectedToNetwork() {
 //            fromNetwork()
 //        } else {
@@ -58,8 +58,8 @@ final class NewsViewModel: BaseViewModel {
                 //
             } receiveValue: { [self] (newsResponse) in
                 
-                QueueService.backgroundQueue.async { [weak self] in
-                    self?.save(newsResponse.articles)
+                QueueService.backgroundQueue.async { 
+                    //self?.save(newsResponse.articles)
                 }
                 
                 articles = newsResponse.articles
@@ -67,6 +67,7 @@ final class NewsViewModel: BaseViewModel {
             }.store(in: &subscription)
     }
     
+    /*
     func save(_ articles: [NewsResponse.Article]) {
         
         print("inserting to db")
@@ -112,6 +113,7 @@ final class NewsViewModel: BaseViewModel {
             print(error)
         }
     }
+    */
     
 }
 

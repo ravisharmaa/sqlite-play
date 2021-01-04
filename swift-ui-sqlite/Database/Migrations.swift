@@ -6,46 +6,37 @@
 //
 
 import Foundation
-import SQLite
+import GRDB
 
 final class Migration {
     
-    var connection: Connection
+    var connection: DatabasePool
     
-    init(connection: Connection) {
+    init(connection: DatabasePool) {
         self.connection = connection
     }
     
     func run() {
-        createTodosTable()
-        createArticlesTable()
-    }
-    
-    private func createTodosTable() {
-        
-        let table = Migration.getTableObject(name: "todos")
-        
-        let id = Expression<Int64>("id")
-        let userId = Expression<Int>("user_id")
-        let title = Expression<String>("title")
-        let completed = Expression<Bool>("completed")
-        
         do {
-            
-            try self.connection.run(table.create(ifNotExists: true, block: { (builder) in
-                builder.column(id, primaryKey: .autoincrement)
-                builder.column(userId)
-                builder.column(title)
-                builder.column(completed)
-            }))
-            
-            
+            try createTodosTable()
+            //createArticlesTable()
         } catch let error {
-            print(error.localizedDescription)
+            print(error)
         }
-        
     }
     
+    private func createTodosTable() throws {
+        try connection.write { database in
+            try database.create(table: "todos", ifNotExists: true) { (definition) in
+                definition.autoIncrementedPrimaryKey("id")
+                definition.column("user_id", .integer)
+                definition.column("title", .text)
+                definition.column("completed", .boolean)
+            }
+        }
+    }
+        
+    /*
     private func createArticlesTable() {
         let table = Migration.getTableObject(name: "articles")
         
@@ -102,4 +93,5 @@ final class Migration {
     class func getTableObject(name: String) -> Table {
         return Table(name)
     }
+ */
 }
