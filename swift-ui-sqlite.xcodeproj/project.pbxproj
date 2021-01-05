@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2915742E25A4DFEC007953B5 /* FileDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2915742D25A4DFEC007953B5 /* FileDownloader.swift */; };
 		292CB5B325A0D6B0007E75DC /* QueueService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 292CB5B225A0D6B0007E75DC /* QueueService.swift */; };
 		293A022625A1650600BB6841 /* NewsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293A022525A1650600BB6841 /* NewsViewModel.swift */; };
 		295050A825A20E11002BE5C7 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 295050A725A20E11002BE5C7 /* GRDB */; };
@@ -25,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2915742D25A4DFEC007953B5 /* FileDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDownloader.swift; sourceTree = "<group>"; };
 		292CB5B225A0D6B0007E75DC /* QueueService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueService.swift; sourceTree = "<group>"; };
 		293A022525A1650600BB6841 /* NewsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewModel.swift; sourceTree = "<group>"; };
 		2968535025A2C028007CD231 /* CodingUserInfoKey+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CodingUserInfoKey+Ext.swift"; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 			children = (
 				29BB9C5725A05B2800D8CF6F /* NetworkService.swift */,
 				292CB5B225A0D6B0007E75DC /* QueueService.swift */,
+				2915742D25A4DFEC007953B5 /* FileDownloader.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -235,6 +238,7 @@
 			files = (
 				29BB9C5B25A0645100D8CF6F /* TodoViewModel.swift in Sources */,
 				29A052D9259DF2BC00ED7B8A /* ViewController.swift in Sources */,
+				2915742E25A4DFEC007953B5 /* FileDownloader.swift in Sources */,
 				29A052AA259DE7FB00ED7B8A /* DatabaseManager.swift in Sources */,
 				2975B392259F94600075FF15 /* Migrations.swift in Sources */,
 				29A05294259DE76600ED7B8A /* AppDelegate.swift in Sources */,

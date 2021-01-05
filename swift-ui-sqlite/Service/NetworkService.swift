@@ -10,6 +10,7 @@ import Combine
 
 enum ApplicationError: Error {
     case invalidResponse
+    case fileNotFound(reason: Error)
 }
 
 struct NetworkService {
@@ -55,5 +56,26 @@ struct NetworkService {
             }
         }
         .eraseToAnyPublisher()
+    }
+    
+    func download (_ reqeust: URLRequest, completion: @escaping(Result<URL, ApplicationError>) -> Void) {
+        
+        let task = session.downloadTask(with: reqeust) { (downloadedURL, response, error) in
+            
+            if let error = error {
+                completion(.failure(.fileNotFound(reason: error)))
+            }
+        
+            if let response = response as? HTTPURLResponse, response.statusCode != 200 {
+                completion(.failure(.invalidResponse))
+            }
+            
+            if let downloadedURL = downloadedURL {
+                completion(.success(downloadedURL))
+            }
+            
+        }
+        
+        task.resume()
     }
 }

@@ -74,14 +74,9 @@ final class NewsViewModel: BaseViewModel {
         
         let _ = try DatabaseManager.shared.connection?.write { (db) in
             
-            //try db.execute(sql: "DELETE from articles")
-            
-            //try articles.forEach({ (article) in
             let jsonEncoder = JSONEncoder()
             let data = try jsonEncoder.encode(articles.articles)
-            try db.execute(sql: "INSERT INTO news (status,totalResults,articles) VALUES(?,?,?)", arguments: [articles.status, articles.totalResults, data ])
-            
-            //})
+            try db.execute(sql: "INSERT INTO news (status,totalResults,articles) VALUES(?,?,?)", arguments: [articles.status, articles.totalResults, data])
             
             print("insertion completed")
         }
@@ -107,40 +102,40 @@ final class NewsViewModel: BaseViewModel {
 extension NewsViewModel {
     
     struct NewsResponse: Codable, Hashable, FetchableRecord, PersistableRecord {
-        
-        let status: String
-        let totalResults: Int
-        
-        let articles: [Article]
+    
+    let status: String
+    let totalResults: Int
+    
+    let articles: [Article]
+    
+    static let databaseDecodingUserInfo: [CodingUserInfoKey: Any] = [.sqliteOrigin: true]
+    
+    static var databaseTableName: String {
+            return "news"
+    }
+    
+    struct Article: Hashable {
+        let id: String?
+        let name: String?
+        let title: String
+        let description: String?
+        let url: String?
+        let urlToImage: String?
+        let publishedAt: String?
+        let content: String?
+        let uuid: UUID = UUID()
         
         static let databaseDecodingUserInfo: [CodingUserInfoKey: Any] = [.sqliteOrigin: true]
         
-        static var databaseTableName: String {
-             return "news"
+        enum AricleOfflineCodingKeys: CodingKey {
+            case name, title, description, content, urlToImage, publishedAt, source, url, id
         }
         
-        struct Article: Hashable {
-            let id: String?
-            let name: String?
-            let title: String
-            let description: String?
-            let url: String?
-            let urlToImage: String?
-            let publishedAt: String?
-            let content: String?
-            let uuid: UUID = UUID()
-            
-            static let databaseDecodingUserInfo: [CodingUserInfoKey: Any] = [.sqliteOrigin: true]
-           
-            enum AricleOfflineCodingKeys: CodingKey {
-                case name, title, description, content, urlToImage, publishedAt, source, url, id
-            }
-            
-            enum ArticleCodingKeys: CodingKey {
-                case title, description, url, urlToImage, publishedAt, content, source, id, name
-            }
+        enum ArticleCodingKeys: CodingKey {
+            case title, description, url, urlToImage, publishedAt, content, source, id, name
         }
     }
+}
 }
 
 extension NewsViewModel.NewsResponse.Article: Codable, FetchableRecord, PersistableRecord {

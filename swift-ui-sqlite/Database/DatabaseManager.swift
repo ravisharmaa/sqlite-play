@@ -26,6 +26,7 @@ final class DatabaseManager {
    
     private init () {}
     
+    @discardableResult
     func prepareConnection() -> DatabasePool? {
         
         let path = prepareFilePath()

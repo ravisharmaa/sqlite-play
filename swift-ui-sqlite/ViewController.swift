@@ -22,7 +22,7 @@ class ViewController: UIViewController {
         
         view.backgroundColor = .red
         
-        newsViewModel.fetch(status: Reachability.isConnectedToNetwork())
+        //newsViewModel.fetch(status: Reachability.isConnectedToNetwork())
     }
     
 }
