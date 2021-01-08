@@ -22,7 +22,7 @@ enum DownloadbleFileTypes {
     }
 }
 
-class FileDownloader {
+final class FileDownloader {
     
     var downloadURL: URL
     
@@ -36,7 +36,6 @@ class FileDownloader {
             switch result {
             case .success(let downloadedURL):
                 do {
-                    
                     try saveFile(from: downloadedURL)
                     completion(.success(true))
                     
@@ -50,17 +49,11 @@ class FileDownloader {
         }
     }
     
-    func saveFile(from downlodedPath: URL) throws {
+    fileprivate func saveFile(from downlodedPath: URL) throws {
         let documentsURL = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
         
         let savedURL = documentsURL.appendingPathComponent(downlodedPath.lastPathComponent)
         
         try FileManager.default.moveItem(at: downlodedPath, to: savedURL)
-        
-        
     }
-    
-    
-    
-    
 }
