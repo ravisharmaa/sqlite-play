@@ -12,7 +12,7 @@ enum ApplicationError: Error {
     case invalidResponse
 }
 
-struct NetworkService {
+class NetworkService {
     
     static let shared: NetworkService = {
         let service = NetworkService()
