@@ -8,5 +8,9 @@
 import Foundation
 
 class NewsFromNetwork{
+    private let service: NetworkService
     
+    init(_ service: NetworkService) {
+        self.service = service
+    }
 }

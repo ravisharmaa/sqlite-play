@@ -10,8 +10,16 @@ import XCTest
 
 class NewsFromNetworkTests: XCTestCase {
     func test_init_doesNotRequestDataFromUrl(){
+        let service = MockNetworkService()
+        let _ = NewsFromNetwork(service)
         
-        let sut = NewsFromNetwork()
+        XCTAssertEqual( service.runCalls, 0)
+    }
+    
+    //MARK: Helpers
+    
+    class MockNetworkService: NetworkService{
+        var runCalls = 0
     }
 }
 

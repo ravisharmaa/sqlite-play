@@ -22,7 +22,7 @@ class NetworkService {
     let session: URLSession
     
     
-    private init(urlSession: URLSession = .shared) {
+    init(urlSession: URLSession = .shared) {
         self.session = urlSession
     }
     
