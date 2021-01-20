@@ -10,6 +10,7 @@ import XCTest
 
 class NewsFromNetworkTests: XCTestCase {
     func test_init_doesNotRequestDataFromUrl(){
+        
         let sut = NewsFromNetwork()
     }
 }
