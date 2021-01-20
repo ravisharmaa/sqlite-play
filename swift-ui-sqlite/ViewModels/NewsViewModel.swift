@@ -8,9 +8,10 @@
 import Foundation
 import Combine
 
-final class NewsViewModel: BaseViewModel {
+final class NewsViewModel {
+    var subscription: Set<AnyCancellable> = []
     
-    override var urlComponents: URLComponents  {
+    var urlComponents: URLComponents  {
         var component = URLComponents()
         component.scheme = "https"
         component.host = "newsapi.org"
@@ -19,17 +20,8 @@ final class NewsViewModel: BaseViewModel {
     
     @Published private (set) var articles: [NewsResponse.Article] = []
     
-    let articlesTable = Migration.getTableObject(name: "articles")
-    
-    let connection = DatabaseManager.shared.connection
-    
     func fetch() {
-        fromDatabase()
-//        if Reachability.isConnectedToNetwork() {
-//            fromNetwork()
-//        } else {
-//            fromDatabase()
-//        }
+        
     }
     
     fileprivate func fromNetwork() {
@@ -69,50 +61,7 @@ final class NewsViewModel: BaseViewModel {
     
     func save(_ articles: [NewsResponse.Article]) {
         
-        print("inserting to db")
-        
-        do {
-            try connection?.run(articlesTable.delete())
-            
-            try articles.forEach({ (article) in
-                try connection?.run("INSERT INTO articles (uuid, name, title, description, content) VALUES(?,?,?,?,?)", [
-                    article.uuid.uuidString, article.name, article.title, article.description, article.content
-                ])
-            })
-            
-            print("insertion completed")
-            
-        } catch let error {
-            print(error)
-        }
-        
-        
     }
-    
-    fileprivate func fromDatabase() {
-        
-       var articles: [NewsResponse.Article] = []
-        do {
-            let statement = try connection!.prepare("SELECT name, title, description, content  FROM articles")
-            for result in statement {
-                let article: NewsResponse.Article = .init(id: nil,
-                                                          name: result[1] as! String,
-                                                          title: result[2] as! String,
-                                                          description: result[3] as? String,
-                                                          url: nil,
-                                                          urlToImage: nil,
-                                                          publishedAt: nil,
-                                                          content: result[4] as? String)
-                articles.append(article)
-            }
-            
-            self.articles = articles
-            
-        } catch let error {
-            print(error)
-        }
-    }
-    
 }
 
 extension NewsViewModel {

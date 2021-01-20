@@ -10,8 +10,6 @@ import Combine
 
 class ViewController: UIViewController {
     
-    let todoViewModel: TodoViewModel = TodoViewModel()
-    
     let newsViewModel: NewsViewModel = NewsViewModel()
     
     fileprivate var subscription: Set<AnyCancellable> = []

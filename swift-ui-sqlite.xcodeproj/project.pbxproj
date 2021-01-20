@@ -9,19 +9,14 @@
 /* Begin PBXBuildFile section */
 		292CB5B325A0D6B0007E75DC /* QueueService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 292CB5B225A0D6B0007E75DC /* QueueService.swift */; };
 		293A022625A1650600BB6841 /* NewsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293A022525A1650600BB6841 /* NewsViewModel.swift */; };
-		2975B392259F94600075FF15 /* Migrations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2975B391259F94600075FF15 /* Migrations.swift */; };
 		29A05294259DE76600ED7B8A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A05293259DE76600ED7B8A /* AppDelegate.swift */; };
 		29A05296259DE76600ED7B8A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A05295259DE76600ED7B8A /* SceneDelegate.swift */; };
 		29A0529A259DE76800ED7B8A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 29A05299259DE76800ED7B8A /* Assets.xcassets */; };
 		29A0529D259DE76800ED7B8A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 29A0529C259DE76800ED7B8A /* Preview Assets.xcassets */; };
 		29A052A0259DE76800ED7B8A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 29A0529E259DE76800ED7B8A /* LaunchScreen.storyboard */; };
-		29A052AA259DE7FB00ED7B8A /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A052A9259DE7FB00ED7B8A /* DatabaseManager.swift */; };
-		29A052CE259DE8AB00ED7B8A /* SQLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29A052B8259DE88400ED7B8A /* SQLite.framework */; };
-		29A052CF259DE8AB00ED7B8A /* SQLite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 29A052B8259DE88400ED7B8A /* SQLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		29A052D9259DF2BC00ED7B8A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A052D8259DF2BC00ED7B8A /* ViewController.swift */; };
 		29A052E4259DFFF600ED7B8A /* Reachibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A052E3259DFFF600ED7B8A /* Reachibility.swift */; };
 		29BB9C5825A05B2800D8CF6F /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BB9C5725A05B2800D8CF6F /* NetworkService.swift */; };
-		29BB9C5B25A0645100D8CF6F /* TodoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BB9C5A25A0645100D8CF6F /* TodoViewModel.swift */; };
 		5CDA7C4225B8059B0089C353 /* swift_ui_sqliteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CDA7C4125B8059B0089C353 /* swift_ui_sqliteTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -84,24 +79,9 @@
 		};
 /* End PBXContainerItemProxy section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		29A052D0259DE8AB00ED7B8A /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				29A052CF259DE8AB00ED7B8A /* SQLite.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
 		292CB5B225A0D6B0007E75DC /* QueueService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueService.swift; sourceTree = "<group>"; };
 		293A022525A1650600BB6841 /* NewsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewModel.swift; sourceTree = "<group>"; };
-		2975B391259F94600075FF15 /* Migrations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Migrations.swift; sourceTree = "<group>"; };
 		29A05290259DE76600ED7B8A /* swift-ui-sqlite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "swift-ui-sqlite.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		29A05293259DE76600ED7B8A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		29A05295259DE76600ED7B8A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -109,12 +89,10 @@
 		29A0529C259DE76800ED7B8A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		29A0529F259DE76800ED7B8A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		29A052A1259DE76800ED7B8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		29A052A9259DE7FB00ED7B8A /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		29A052AD259DE88400ED7B8A /* SQLite.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SQLite.xcodeproj; path = "../../../Downloads/SQLite.swift-master/SQLite.xcodeproj"; sourceTree = "<group>"; };
 		29A052D8259DF2BC00ED7B8A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		29A052E3259DFFF600ED7B8A /* Reachibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachibility.swift; sourceTree = "<group>"; };
 		29BB9C5725A05B2800D8CF6F /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
-		29BB9C5A25A0645100D8CF6F /* TodoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoViewModel.swift; sourceTree = "<group>"; };
 		5CDA7C3F25B8059B0089C353 /* swift-ui-sqliteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "swift-ui-sqliteTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CDA7C4125B8059B0089C353 /* swift_ui_sqliteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = swift_ui_sqliteTests.swift; sourceTree = "<group>"; };
 		5CDA7C4325B8059B0089C353 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -125,7 +103,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				29A052CE259DE8AB00ED7B8A /* SQLite.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -165,7 +142,6 @@
 				29BB9C5625A05AFC00D8CF6F /* Models */,
 				29BB9C4E25A05A2900D8CF6F /* Service */,
 				29A052DB259DFFDF00ED7B8A /* Connectivity */,
-				29A052A8259DE7E000ED7B8A /* Database */,
 				29A05293259DE76600ED7B8A /* AppDelegate.swift */,
 				29A05295259DE76600ED7B8A /* SceneDelegate.swift */,
 				29A05299259DE76800ED7B8A /* Assets.xcassets */,
@@ -184,15 +160,6 @@
 				29A0529C259DE76800ED7B8A /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		29A052A8259DE7E000ED7B8A /* Database */ = {
-			isa = PBXGroup;
-			children = (
-				29A052A9259DE7FB00ED7B8A /* DatabaseManager.swift */,
-				2975B391259F94600075FF15 /* Migrations.swift */,
-			);
-			path = Database;
 			sourceTree = "<group>";
 		};
 		29A052AE259DE88400ED7B8A /* Products */ = {
@@ -243,7 +210,6 @@
 		29BB9C5925A0644300D8CF6F /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				29BB9C5A25A0645100D8CF6F /* TodoViewModel.swift */,
 				293A022525A1650600BB6841 /* NewsViewModel.swift */,
 			);
 			path = ViewModels;
@@ -268,7 +234,6 @@
 				29A0528C259DE76600ED7B8A /* Sources */,
 				29A0528D259DE76600ED7B8A /* Frameworks */,
 				29A0528E259DE76600ED7B8A /* Resources */,
-				29A052D0259DE8AB00ED7B8A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -417,10 +382,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				29BB9C5B25A0645100D8CF6F /* TodoViewModel.swift in Sources */,
 				29A052D9259DF2BC00ED7B8A /* ViewController.swift in Sources */,
-				29A052AA259DE7FB00ED7B8A /* DatabaseManager.swift in Sources */,
-				2975B392259F94600075FF15 /* Migrations.swift in Sources */,
 				29A05294259DE76600ED7B8A /* AppDelegate.swift in Sources */,
 				29A052E4259DFFF600ED7B8A /* Reachibility.swift in Sources */,
 				29A05296259DE76600ED7B8A /* SceneDelegate.swift in Sources */,
