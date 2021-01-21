@@ -11,8 +11,9 @@ import Combine
 
 class NewsFromNetworkTests: XCTestCase {
     func test_init_doesNotRequestDataFromUrl(){
+        let subscription: Set<AnyCancellable> = []
         let service = MockNetworkService()
-        let _ = NewsFromNetwork(service)
+        let _ = NewsFromNetwork(service, subscription: subscription)
         
         XCTAssertEqual( service.runCalls, 0)
     }
@@ -21,8 +22,9 @@ class NewsFromNetworkTests: XCTestCase {
         
         let url = URL(string: "https://a-url.com")!
         
+        let subscription: Set<AnyCancellable> = []
         let service = MockNetworkService()
-        let sut = NewsFromNetwork(service)
+        let sut = NewsFromNetwork(service, subscription: subscription)
         
         service.news = createNews()
         
@@ -35,8 +37,9 @@ class NewsFromNetworkTests: XCTestCase {
     func test_load_deliversInvalidDataErrorOnFailure() {
         let url = URL(string: "https://a-url.com")!
         
+        let subscription: Set<AnyCancellable> = []
         let service = MockNetworkService()
-        let sut = NewsFromNetwork(service)
+        let sut = NewsFromNetwork(service, subscription: subscription)
         
         service.isValidCase = false
         
@@ -62,8 +65,9 @@ class NewsFromNetworkTests: XCTestCase {
     func test_load_deliversNewsResponseOnSuccess(){
         let url = URL(string: "https://a-url.com")!
         
+        let subscription: Set<AnyCancellable> = []
         let service = MockNetworkService()
-        let sut = NewsFromNetwork(service)
+        let sut = NewsFromNetwork(service, subscription: subscription)
         
         service.isValidCase = true
         

@@ -12,8 +12,9 @@ class NewsFromNetwork{
     var subscription: Set<AnyCancellable> = []
     private let service: NetworkService
     
-    init(_ service: NetworkService) {
+    init(_ service: NetworkService = NetworkService(), subscription: Set<AnyCancellable>) {
         self.service = service
+        self.subscription = subscription
     }
     
     func fetch(request: URLRequest, completion: @escaping(Result<NewsResponse,Error>) -> ()) {
