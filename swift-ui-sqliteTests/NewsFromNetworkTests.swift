@@ -36,7 +36,7 @@ class NewsFromNetworkTests: XCTestCase {
         let service = MockNetworkService()
         let sut = NewsFromNetwork(service)
         
-        service.isValidCase = false 
+        service.isValidCase = false
         
         let exp = expectation(description: "Wait for load completion")
         
@@ -63,17 +63,24 @@ class NewsFromNetworkTests: XCTestCase {
         let service = MockNetworkService()
         let sut = NewsFromNetwork(service)
         
-        service.isValidCase = false
+        service.isValidCase = true
+        
+        let expectedNews = createNews()
+        
+        let exp = expectation(description: "Wait for load completion")
         
         sut.fetch(request: URLRequest(url: url)){ result in
             switch result{
             
-            case .success(_):
-                break
-            case .failure(_):
-                break
+            case let .success(news):
+                XCTAssertEqual(news, expectedNews)
+            default:
+                XCTFail("should recieve NewsResponse")
             }
+            exp.fulfill()
         }
+        
+        waitForExpectations(timeout: 0.1)
     }
     
     //MARK: Helpers
@@ -116,6 +123,27 @@ class NewsFromNetworkTests: XCTestCase {
         }
     }
     
-    
+    private func createNews() -> NewsResponse{
+       let article = Article(id: "id", name: "name", title: "title", description: "desc", url: "url", urlToImage: "urltoimage", publishedAt: "publishedat", content: "content")
+       let articleJson = [
+           "id": article.id,
+           "name": article.name,
+           "title": article.title,
+           "description": article.description,
+           "url": article.url,
+           "urlToImage": article.urlToImage,
+           "publishedAt": article.publishedAt,
+           "content": article.content
+       ]
+
+       let news = NewsResponse(status: "status", totalResults: 2, articles: [article,article])
+       let json = [
+           "status": news.status,
+           "totalResults": news.totalResults,
+           "articles": [articleJson,articleJson]
+       ] as [String : Any]
+       
+       return news
+   }
 }
 
