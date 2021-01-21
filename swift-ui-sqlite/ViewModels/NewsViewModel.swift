@@ -44,7 +44,7 @@ final class NewsViewModel {
         
         innerUrl.queryItems = urlQueryItem
         
-        NetworkService.shared.run(URLRequest(url: innerUrl.url!), model: NewsResponse.self)
+        NetworkService.shared.run(URLRequest(url: innerUrl.url!))
             .receive(on: RunLoop.main)
             .sink { (_) in
                 //

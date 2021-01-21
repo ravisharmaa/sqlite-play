@@ -13,4 +13,8 @@ class NewsFromNetwork{
     init(_ service: NetworkService) {
         self.service = service
     }
+    
+    func fetch(request: URLRequest, completion: @escaping() -> ()) {
+        service.run(request)
+    }
 }
