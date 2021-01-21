@@ -12,7 +12,7 @@ enum ApplicationError: Error {
     case invalidResponse
 }
 
-struct NetworkService {
+class NetworkService {
     
     static let shared: NetworkService = {
         let service = NetworkService()
@@ -22,11 +22,11 @@ struct NetworkService {
     let session: URLSession
     
     
-    private init(urlSession: URLSession = .shared) {
+    init(urlSession: URLSession = .shared) {
         self.session = urlSession
     }
     
-    func run<T: Decodable>(_ request: URLRequest, model: T.Type) -> AnyPublisher<T, ApplicationError> {
+    func run(_ request: URLRequest) -> AnyPublisher<NewsResponse, ApplicationError> {
         
         let urlPublisher = session.dataTaskPublisher(for: request)
         
@@ -45,7 +45,7 @@ struct NetworkService {
             }
             return element.data
         }
-        .decode(type: T.self, decoder: JSONDecoder())
+        .decode(type: NewsResponse.self, decoder: JSONDecoder())
         .mapError { error -> ApplicationError in
             if let error = error as? ApplicationError {
                 return error
