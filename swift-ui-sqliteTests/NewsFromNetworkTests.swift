@@ -110,23 +110,8 @@ class NewsFromNetworkTests: XCTestCase {
     
     private func createNews() -> NewsResponse{
        let article = Article(id: "id", name: "name", title: "title", description: "desc", url: "url", urlToImage: "urltoimage", publishedAt: "publishedat", content: "content")
-       let articleJson = [
-           "id": article.id,
-           "name": article.name,
-           "title": article.title,
-           "description": article.description,
-           "url": article.url,
-           "urlToImage": article.urlToImage,
-           "publishedAt": article.publishedAt,
-           "content": article.content
-       ]
 
        let news = NewsResponse(status: "status", totalResults: 2, articles: [article,article])
-       let json = [
-           "status": news.status,
-           "totalResults": news.totalResults,
-           "articles": [articleJson,articleJson]
-       ] as [String : Any]
        
        return news
    }
