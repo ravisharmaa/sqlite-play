@@ -47,6 +47,21 @@ class NewsFromNetworkTests: XCTestCase {
         }
     }
     
+    func test_load_deliversNewsResponseOnSuccess(){
+        let url = URL(string: "https://a-url.com")!
+        
+        let service = MockNetworkService()
+        let sut = NewsFromNetwork(service)
+        
+        service.isValidCase = false
+        
+        sut.fetch(request: URLRequest(url: url)){ result in
+            switch result{
+            
+            }
+        }
+    }
+    
     //MARK: Helpers
     
     class MockNetworkService: NetworkService{
