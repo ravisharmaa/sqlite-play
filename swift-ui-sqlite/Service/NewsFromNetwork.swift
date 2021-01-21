@@ -16,13 +16,13 @@ class NewsFromNetwork{
         self.service = service
     }
     
-    func fetch(request: URLRequest, completion: @escaping(Error) -> ()) {
+    func fetch(request: URLRequest, completion: @escaping(Result<NewsResponse,Error>) -> ()) {
         var error: Error?
         service.run(request).receive(on: RunLoop.main)
             .sink { recievedCompletion in
                 switch recievedCompletion{
                 case let .failure(error):
-                    completion(error)
+                    completion(.failure(error))
                 case .finished:
                     break
                 }
