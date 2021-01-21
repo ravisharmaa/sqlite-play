@@ -24,23 +24,43 @@ class NewsFromNetworkTests: XCTestCase {
         let service = MockNetworkService()
         let sut = NewsFromNetwork(service)
         
-        sut.fetch(request: URLRequest(url: url)){  }
-        sut.fetch(request: URLRequest(url: url)){  }
+        sut.fetch(request: URLRequest(url: url)){ _ in }
+        sut.fetch(request: URLRequest(url: url)){ _ in }
         
         XCTAssertEqual( service.runCalls, 2)
+    }
+    
+    func test_load_deliversInvalidDataErrorOnFailure() {
+        let url = URL(string: "https://a-url.com")!
+        
+        let service = MockNetworkService()
+        let sut = NewsFromNetwork(service)
+        
+        service.isValidCase = false
+        
+        sut.fetch(request: URLRequest(url: url)){ error in
+            if error is ApplicationError{
+                XCTAssertEqual(error as! ApplicationError, ApplicationError.invalidResponse)
+            }else {
+                XCTFail("should be ApplicationError")
+            }
+        }
     }
     
     //MARK: Helpers
     
     class MockNetworkService: NetworkService{
         var runCalls = 0
+        var isValidCase = true
         
         override func run(_ request: URLRequest) -> AnyPublisher<NewsResponse, ApplicationError> {
             
             runCalls += 1
-
-            return Just(createNews()).setFailureType(to: ApplicationError.self).eraseToAnyPublisher()
-
+            if isValidCase{
+                return Just(createNews()).setFailureType(to: ApplicationError.self).eraseToAnyPublisher()
+            }else{
+                return Fail<NewsResponse, ApplicationError>(error: .invalidResponse).eraseToAnyPublisher()
+            }
         }
         
         private func createNews() -> NewsResponse{

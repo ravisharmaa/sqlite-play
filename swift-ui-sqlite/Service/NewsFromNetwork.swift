@@ -6,15 +6,29 @@
 //
 
 import Foundation
+import Combine
 
 class NewsFromNetwork{
+    var subscription: Set<AnyCancellable> = []
     private let service: NetworkService
     
     init(_ service: NetworkService) {
         self.service = service
     }
     
-    func fetch(request: URLRequest, completion: @escaping() -> ()) {
-        service.run(request)
+    func fetch(request: URLRequest, completion: @escaping(Error) -> ()) {
+        var error: Error?
+        service.run(request).receive(on: RunLoop.main)
+            .sink { recievedCompletion in
+                switch recievedCompletion{
+                case let .failure(error):
+                    completion(error)
+                case .finished:
+                    break
+                }
+            } receiveValue: { _ in
+                
+                
+            }.store(in: &subscription)
     }
 }
