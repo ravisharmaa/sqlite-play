@@ -18,7 +18,6 @@ class NewsFromNetwork{
     }
     
     func fetch(request: URLRequest, completion: @escaping(Result<NewsResponse,Error>) -> ()) {
-        var error: Error?
         service.run(request).receive(on: RunLoop.main)
             .sink { recievedCompletion in
                 switch recievedCompletion{
