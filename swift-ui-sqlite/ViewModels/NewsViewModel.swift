@@ -44,19 +44,15 @@ final class NewsViewModel {
         
         innerUrl.queryItems = urlQueryItem
         
-        NetworkService.shared.run(URLRequest(url: innerUrl.url!))
-            .receive(on: RunLoop.main)
-            .sink { (_) in
-                //
-            } receiveValue: { [self] (newsResponse) in
-                
-                QueueService.backgroundQueue.async { [weak self] in
-                    self?.save(newsResponse.articles)
-                }
-                
-                articles = newsResponse.articles
-                
-            }.store(in: &subscription)
+        let newsFromNetwork = NewsFromNetwork(subscription: subscription)
+        newsFromNetwork.fetch(request: URLRequest(url: innerUrl.url!)){ result in
+            switch result{
+            case let .success(news):
+                self.articles = news.articles
+            case .failure(_):
+                break
+            }
+        }
     }
     
     func save(_ articles: [Article]) {
