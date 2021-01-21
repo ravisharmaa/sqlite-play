@@ -24,6 +24,8 @@ class NewsFromNetworkTests: XCTestCase {
         let service = MockNetworkService()
         let sut = NewsFromNetwork(service)
         
+        service.news = createNews()
+        
         sut.fetch(request: URLRequest(url: url)){ _ in }
         sut.fetch(request: URLRequest(url: url)){ _ in }
         
@@ -66,6 +68,7 @@ class NewsFromNetworkTests: XCTestCase {
         service.isValidCase = true
         
         let expectedNews = createNews()
+        service.news = expectedNews
         
         let exp = expectation(description: "Wait for load completion")
         
@@ -88,6 +91,7 @@ class NewsFromNetworkTests: XCTestCase {
     class MockNetworkService: NetworkService{
         var runCalls = 0
         var isValidCase = true
+        var news: NewsResponse!
         
         override func run(_ request: URLRequest) -> AnyPublisher<NewsResponse, ApplicationError> {
             
@@ -100,25 +104,6 @@ class NewsFromNetworkTests: XCTestCase {
         }
         
         private func createNews() -> NewsResponse{
-            let article = Article(id: "id", name: "name", title: "title", description: "desc", url: "url", urlToImage: "urltoimage", publishedAt: "publishedat", content: "content")
-            let articleJson = [
-                "id": article.id,
-                "name": article.name,
-                "title": article.title,
-                "description": article.description,
-                "url": article.url,
-                "urlToImage": article.urlToImage,
-                "publishedAt": article.publishedAt,
-                "content": article.content
-            ]
-
-            let news = NewsResponse(status: "status", totalResults: 2, articles: [article,article])
-            let json = [
-                "status": news.status,
-                "totalResults": news.totalResults,
-                "articles": [articleJson,articleJson]
-            ] as [String : Any]
-            
             return news
         }
     }
