@@ -26,7 +26,8 @@ class NewsFromNetwork{
                 case .finished:
                     break
                 }
-            } receiveValue: { _ in
+            } receiveValue: { news in
+                completion(.success(news))
                 
                 
             }.store(in: &subscription)
