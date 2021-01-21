@@ -36,7 +36,9 @@ class NewsFromNetworkTests: XCTestCase {
         let service = MockNetworkService()
         let sut = NewsFromNetwork(service)
         
-//        service.isValidCase = false
+//        service.isValidCase = false 
+        
+        let exp = expectation(description: "Wait for load completion")
         
         sut.fetch(request: URLRequest(url: url)){ result in
             switch result{
@@ -49,7 +51,10 @@ class NewsFromNetworkTests: XCTestCase {
             default:
                 XCTFail("should recieve error")
             }
+            exp.fulfill()
         }
+        
+        waitForExpectations(timeout: 0.1)
     }
     
     func test_load_deliversNewsResponseOnSuccess(){
