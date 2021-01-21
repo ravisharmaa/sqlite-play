@@ -14,7 +14,7 @@ final class NewsViewModel {
     @Published private (set) var articles: [Article] = []
     
     func fetch() {
-        
+        fromNetwork()
     }
     
     fileprivate func fromNetwork() {
