@@ -17,18 +17,6 @@ class NewsFromNetworkTests: XCTestCase {
         XCTAssertEqual( service.runCalls, 0)
     }
     
-    func test_fetch_requestsDataFromURL() {
-        
-        let url = URL(string: "https://a-url.com")!
-        
-        let service = MockNetworkService()
-        let sut = NewsFromNetwork(service)
-        
-        sut.fetch(request: URLRequest(url: url)){  }
-        
-        XCTAssertEqual( service.runCalls, 1)
-    }
-    
     func test_fetchTwice_requestsDataFromURLTwice() {
         
         let url = URL(string: "https://a-url.com")!
