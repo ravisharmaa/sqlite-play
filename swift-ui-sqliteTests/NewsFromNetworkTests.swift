@@ -36,7 +36,7 @@ class NewsFromNetworkTests: XCTestCase {
         let service = MockNetworkService()
         let sut = NewsFromNetwork(service)
         
-        service.isValidCase = false
+//        service.isValidCase = false
         
         sut.fetch(request: URLRequest(url: url)){ result in
             switch result{
