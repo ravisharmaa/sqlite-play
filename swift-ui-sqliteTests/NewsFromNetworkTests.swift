@@ -39,6 +39,11 @@ class NewsFromNetworkTests: XCTestCase {
             
             runCalls += 1
 
+            return Just(createNews()).setFailureType(to: ApplicationError.self).eraseToAnyPublisher()
+
+        }
+        
+        private func createNews() -> NewsResponse{
             let article = Article(id: "id", name: "name", title: "title", description: "desc", url: "url", urlToImage: "urltoimage", publishedAt: "publishedat", content: "content")
             let articleJson = [
                 "id": article.id,
@@ -57,10 +62,11 @@ class NewsFromNetworkTests: XCTestCase {
                 "totalResults": news.totalResults,
                 "articles": [articleJson,articleJson]
             ] as [String : Any]
-
-            return Just(news).setFailureType(to: ApplicationError.self).eraseToAnyPublisher()
-
+            
+            return news
         }
     }
+    
+    
 }
 
