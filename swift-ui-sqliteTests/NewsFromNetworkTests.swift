@@ -38,11 +38,16 @@ class NewsFromNetworkTests: XCTestCase {
         
         service.isValidCase = false
         
-        sut.fetch(request: URLRequest(url: url)){ error in
-            if error is ApplicationError{
-                XCTAssertEqual(error as! ApplicationError, ApplicationError.invalidResponse)
-            }else {
-                XCTFail("should be ApplicationError")
+        sut.fetch(request: URLRequest(url: url)){ result in
+            switch result{
+            case let .failure(error):
+                if error is ApplicationError{
+                    XCTAssertEqual(error as! ApplicationError, ApplicationError.invalidResponse)
+                }else {
+                    XCTFail("should be ApplicationError")
+                }
+            default:
+                XCTFail("should recieve error")
             }
         }
     }
@@ -58,6 +63,10 @@ class NewsFromNetworkTests: XCTestCase {
         sut.fetch(request: URLRequest(url: url)){ result in
             switch result{
             
+            case .success(_):
+                break
+            case .failure(_):
+                break
             }
         }
     }
